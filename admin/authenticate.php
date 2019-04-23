@@ -9,7 +9,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	//Get DB instance.
 	$db = getDbInstance();
 
-	$db->where("username", $username);
+	if(filter_var($username, FILTER_VALIDATE_EMAIL)){
+		$db->where("email", $username);
+	}
+	else{
+		$db->where("username", $username);
+	}
+	
 
 	$row = $db->get('users_accounts');
 
