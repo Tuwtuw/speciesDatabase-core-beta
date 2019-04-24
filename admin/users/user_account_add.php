@@ -38,6 +38,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		exit();
 	}
 
+    $db->where('email', $data_to_db['email']);
+    $db->getOne('users_accounts');
+    if($db->count >= 1)
+    {
+        $_SESSION['failure'] = 'This e-mail is already in use';
+        header('location: user_account_add.php');
+        exit();
+    }
+
 	// Encrypting the password
 	$data_to_db['password'] = password_hash($data_to_db['password'], PASSWORD_DEFAULT);
 
@@ -47,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
 	if ($last_id)
 	{
-		$_SESSION['success'] = 'User account successfully added';
+		$_SESSION['success'] = 'User account successfully added, confirmation email sent!';
 		header('location: users_accounts.php');
 		exit();
 	}
